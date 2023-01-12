@@ -4,8 +4,9 @@ from selenium import webdriver
 class WebDriverContext:
     """Контекст для открытия/закрытия браузера через вебдрайвер."""
 
-    def __init__(self, name: str = 'chrome'):
-        self.name = name.lower()
+    def __init__(self, name: str = 'chrome', head: bool = False):
+        self.name = str(name).lower()
+        self.head = bool(head)
 
     def __enter__(self):
         """Вход в контекст, ставит драйвер"""
@@ -15,7 +16,7 @@ class WebDriverContext:
                 from selenium.webdriver.firefox.options import Options
                 from webdriver_manager.firefox import GeckoDriverManager
                 options = Options()
-                # options.headless = True
+                options.headless = self.head
                 # options.add_argument("--headless")
                 self.driver = webdriver.Firefox(
                     service=Service(GeckoDriverManager().install()),
@@ -26,8 +27,9 @@ class WebDriverContext:
                 from selenium.webdriver.edge.options import Options
                 from webdriver_manager.microsoft import EdgeChromiumDriverManager
                 options = Options()
-                # options.headless = True
+                options.headless = self.head
                 # options.add_argument("--headless")
+                options.add_experimental_option('excludeSwitches', ['enable-logging'])
                 self.driver = webdriver.Edge(
                     service=Service(EdgeChromiumDriverManager().install()),
                     options=options
@@ -37,7 +39,7 @@ class WebDriverContext:
                 from selenium.webdriver.chrome.options import Options
                 from webdriver_manager.chrome import ChromeDriverManager
                 options = Options()
-                # options.headless = True
+                options.headless = self.head
                 # options.add_argument("--headless")
                 # options.add_argument("--disable-dev-shm-usage")
                 # options.add_argument("--no-sandbox")
@@ -47,6 +49,7 @@ class WebDriverContext:
                     service=Service(ChromeDriverManager().install()),
                     chrome_options=options
                 )
+        self.driver.implicitly_wait(5)
         return self.driver
     
     #     chrome_options = Options()
