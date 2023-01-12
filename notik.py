@@ -19,30 +19,37 @@ class Notik():
         )
 
     def items(self, driver: webdriver.Chrome):
-        pages = [None]
-        paginator = driver.find_elements(By.CLASS_NAME, 'paginator')
-        if paginator:
-            pages.extend(
-                v.get_attribute('href')
-                for v in paginator[0].find_elements(By.TAG_NAME, 'a')[1:]
-            )
+        # driver.implicitly_wait(5)
 
-        for page in pages:
-            if page is not None:
-                driver.get(page)
-
+        for url in self.urls:
+            driver.get(url)
             ActionChains(driver).pause(2).perform()
-            for item in driver.find_elements(By.CSS_SELECTOR, '.goods-list-grouped-table .goods-list-table'):
-                tds = item.find_elements(By.TAG_NAME, 'td')
-                ram_ssd = tds[2].text.split()
-                out = {
-                    'cpu_hhz': int(tds[1].text.rsplit(None, 2)[-2]) / 1000,
-                    'ram_gb': int(ram_ssd[0]),
-                    'ssd_gb': int(ram_ssd[-2]),
-                    'price_rub': tds[7].find_element(By.TAG_NAME, 'a').get_attribute('ecprice'),
-                    'name': tds[7].find_element(By.TAG_NAME, 'a').get_attribute('ecname'),
-                    'url': tds[0].find_element(By.TAG_NAME, 'a').get_attribute('href'),
-                    'visited_at': str(datetime.today())[:19],
-                }
+            pages = [None]
+            paginator = driver.find_elements(By.CLASS_NAME, 'paginator')
+            if paginator:
+                pages.extend(
+                    v.get_attribute('href')
+                    for v in paginator[0].find_elements(By.TAG_NAME, 'a')[1:]
+                )
 
-                yield out
+            for page in pages:
+                if page is not None:
+                    driver.get(page)
+                    ActionChains(driver).pause(2).perform()
+
+                for item in driver.find_elements(By.CLASS_NAME, 'goods-list-table'):
+                    tds = item.find_elements(By.TAG_NAME, 'td')
+                    ram_ssd = tds[2].text.split()
+                    out = {
+                        'cpu_hhz': int(tds[1].text.rsplit(None, 2)[-2]) / 1000,
+                        'ram_gb': int(ram_ssd[0]),
+                        'ssd_gb': int(ram_ssd[-2]),
+                        'price_rub': tds[7].find_element(By.TAG_NAME, 'a').get_attribute('ecprice'),
+                        'name': tds[7].find_element(By.TAG_NAME, 'a').get_attribute('ecname'),
+                        'url': tds[0].find_element(By.TAG_NAME, 'a').get_attribute('href'),
+                        'visited_at': str(datetime.today())[:19],
+                    }
+
+                    yield out
+
+        return

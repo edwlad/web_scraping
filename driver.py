@@ -49,18 +49,8 @@ class WebDriverContext:
                     service=Service(ChromeDriverManager().install()),
                     chrome_options=options
                 )
-        self.driver.implicitly_wait(5)
         return self.driver
     
-    #     chrome_options = Options()
-    #     chrome_options.add_argument("--headless")
-    #     chrome_options.add_argument("--no-sandbox")
-    #     chrome_options.add_argument("--disable-dev-shm-usage")
-    #     # display = Display(visible=0, size=(800, 800))
-    #     # display.start()
-    #     self.driver = webdriver.Chrome(
-    #         ChromeDriverManager().install(), chrome_options=chrome_options
-    #     )
     #     self.driver.get(self.start_url)
     #     cookies_list = self.driver.get_cookies()
     #     self.cookies_dict = {}

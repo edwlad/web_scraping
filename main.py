@@ -1,18 +1,17 @@
 from driver import WebDriverContext
 from notik import Notik
-# from selenium import webdriver
-# from selenium.webdriver import ActionChains
-# from selenium.webdriver.support.wait import WebDriverWait
-# from selenium.webdriver.common.by import By
+from citilink import Citilink
 
+browser = ('chrome', 'firefox', 'edge')[2]
+headless = False
+max_items = 600
 
-sites = (Notik(),)
+sites = (Notik(), Citilink())
 
-with WebDriverContext('', False) as driver:
+with WebDriverContext(browser, headless) as driver:
     cnt = 1
     for site in sites:
-        for url in site.urls:
-            driver.get(url)
-            # ActionChains(driver).pause(3).perform()
-            for cnt, item in enumerate(site.items(driver), cnt):
-                print(cnt, item)
+        for cnt, item in enumerate(site.items(driver), cnt):
+            print(cnt, item)
+            if cnt >= max_items:
+                break
