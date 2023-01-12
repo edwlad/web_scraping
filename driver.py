@@ -17,6 +17,7 @@ class WebDriverContext:
                 from webdriver_manager.firefox import GeckoDriverManager
                 options = Options()
                 options.headless = self.head
+                options.page_load_strategy = 'eager'
                 # options.add_argument("--headless")
                 self.driver = webdriver.Firefox(
                     service=Service(GeckoDriverManager().install()),
@@ -28,6 +29,7 @@ class WebDriverContext:
                 from webdriver_manager.microsoft import EdgeChromiumDriverManager
                 options = Options()
                 options.headless = self.head
+                options.page_load_strategy = 'eager'
                 # options.add_argument("--headless")
                 options.add_experimental_option('excludeSwitches', ['enable-logging'])
                 self.driver = webdriver.Edge(
@@ -40,6 +42,7 @@ class WebDriverContext:
                 from webdriver_manager.chrome import ChromeDriverManager
                 options = Options()
                 options.headless = self.head
+                options.page_load_strategy = 'eager'
                 # options.add_argument("--headless")
                 # options.add_argument("--disable-dev-shm-usage")
                 # options.add_argument("--no-sandbox")
@@ -50,7 +53,7 @@ class WebDriverContext:
                     chrome_options=options
                 )
         return self.driver
-    
+
     #     self.driver.get(self.start_url)
     #     cookies_list = self.driver.get_cookies()
     #     self.cookies_dict = {}

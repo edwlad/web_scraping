@@ -2,7 +2,7 @@ from driver import WebDriverContext
 from notik import Notik
 from citilink import Citilink
 
-browser = ('chrome', 'firefox', 'edge')[2]
+browser = ('chrome', 'firefox', 'edge')[1]
 headless = False
 max_items = 600
 
