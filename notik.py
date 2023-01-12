@@ -22,10 +22,10 @@ class Notik():
         pages = [None]
         paginator = driver.find_elements(By.CLASS_NAME, 'paginator')
         if paginator:
-            pages.extend([
+            pages.extend(
                 v.get_attribute('href')
                 for v in paginator[0].find_elements(By.TAG_NAME, 'a')[1:]
-            ])
+            )
 
         for page in pages:
             if page is not None:
