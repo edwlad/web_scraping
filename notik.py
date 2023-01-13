@@ -40,12 +40,13 @@ class Notik():
                 for item in driver.find_elements(By.CLASS_NAME, 'goods-list-table'):
                     tds = item.find_elements(By.TAG_NAME, 'td')
                     ram_ssd = tds[2].text.split()
+                    price_name = tds[7].find_element(By.TAG_NAME, 'a')
                     out = {
                         'cpu_hhz': int(tds[1].text.rsplit(None, 2)[-2]) / 1000,
                         'ram_gb': int(ram_ssd[0]),
                         'ssd_gb': int(ram_ssd[-2]),
-                        'price_rub': tds[7].find_element(By.TAG_NAME, 'a').get_attribute('ecprice'),
-                        'name': tds[7].find_element(By.TAG_NAME, 'a').get_attribute('ecname'),
+                        'price_rub': price_name.get_attribute('ecprice'),
+                        'name': price_name.get_attribute('ecname'),
                         'url': tds[0].find_element(By.TAG_NAME, 'a').get_attribute('href'),
                         'visited_at': str(datetime.today())[:19],
                     }
