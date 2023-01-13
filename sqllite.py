@@ -12,7 +12,6 @@ class Sqllite():
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        # self.con.commit()
         self.cur.close()
         self.con.close()
         if exc_type is not None:
@@ -35,14 +34,33 @@ class Sqllite():
         )
 
     def insert(self, data: list[dict]):
-        # print(data)
         self.cur.executemany(
-            f'INSERT INTO {self.tb_name} ('
-            'url, visited_at, name, cpu_hhz, ram_gb, ssd_gb, price_rub'
-            ') VALUES ('
-            ':url, :visited_at, :name, :cpu_hhz, :ram_gb, :ssd_gb, :price_rub'
-            ');',
+            f'''
+            INSERT INTO {self.tb_name} (url, visited_at, name, cpu_hhz, ram_gb, ssd_gb, price_rub, rank) 
+            VALUES (:url, :visited_at, :name, :cpu_hhz, :ram_gb, :ssd_gb, :price_rub, :rank);
+            ''',
             data
         )
         self.con.commit()
 
+    def top_list(self, top=5):
+        cols = ('url', 'visited_at', 'name', 'cpu_hhz', 'ram_gb', 'ssd_gb', 'price_rub', 'rank')
+
+        res = self.cur.execute(f'''
+            SELECT {','.join(cols)}
+            FROM {self.tb_name}
+            ORDER BY rank DESC
+            LIMIT {top}
+            ;''')
+
+        out = res.fetchone()
+        while out:
+            yield dict(zip(cols, out))
+            out = res.fetchone()
+
+    def update_rank(self, ranks):
+        self.cur.execute(f'''
+            UPDATE {self.tb_name}
+            SET rank = {' + '.join(' * '.join(map(str, v)) for v in ranks)}
+            ;''')
+        self.con.commit()
