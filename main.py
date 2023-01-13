@@ -15,3 +15,6 @@ with WebDriverContext(browser, headless) as driver:
             print(cnt, item)
             if cnt >= max_items:
                 break
+        else:
+            continue
+        break
