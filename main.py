@@ -4,14 +4,13 @@ from notik import Notik
 from citilink import Citilink
 
 # Параметры
-browser = ('chrome', 'firefox', 'edge')[1]  # Выбор браузера
+browser = ('chrome', 'firefox', 'edge')[0]  # Выбор браузера
 headless = True  # Не показывать окно браузера
 max_items = 600  # Максимальное количество записей
-new_data = False  # Заново собрать данные с сайтов
+new_data = True  # Заново собрать данные с сайтов
 ranks = (('cpu_hhz', 2), ('ram_gb', 5), ('ssd_gb', 0.1), ('price_rub', -0.001))  # Рейтинг параметров
 new_rank = False  # Пересчитать рейтинг
 top = 5  # Количество лучших по рейтингу для вывода
-
 
 sites = (Notik(), Citilink())
 with Sqllite() as db:
