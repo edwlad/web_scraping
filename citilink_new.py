@@ -19,25 +19,26 @@ class Citilink():
                 driver.get(next_page)
                 ActionChains(driver).pause(2).perform()
 
-                for item in driver.find_elements(By.CLASS_NAME, 'ProductCardHorizontal'):
-                    head = item.find_element(By.CSS_SELECTOR, '.ProductCardHorizontal__header-block a')
-                    props = item.find_element(By.CLASS_NAME, 'ProductCardHorizontal__properties').text
+                for item in driver.find_elements(By.XPATH, '//*[contains(text(), "Экран")]/ancestor::div[2]'):
+                    head = item.find_element(By.XPATH, './/a[contains(text(), "Ноутбук")]')
+                    props = item.text
                     cpu_hhz = re.search(r'Процессор.+?ГГц', props)
                     ram_gb = re.search(r'память.+?ГБ', props)
                     ssd_gb = re.search(r'(Диск|Объем).+?ГБ', props)
+                    
                     out = {
                         'cpu_hhz': float(cpu_hhz[0].split()[-2]) if cpu_hhz else 0.0,
                         'ram_gb': int(ram_gb[0].split()[-2]) if ram_gb else 0,
                         'ssd_gb': int(ssd_gb[0].split()[-2]) if ssd_gb else 0,
-                        'price_rub': int(item.get_attribute('data-price')),
+                        'price_rub': int(item.find_element(By.XPATH, './/*[@data-meta-price]').get_attribute('data-meta-price')),
                         'name': head.text,
                         'url': head.get_attribute('href'),
                         'visited_at': str(datetime.today())[:19],
                     }
-
+                    # price item.text.replace(' ', '').split()
                     yield out
 
-                next_page = driver.find_elements(By.CSS_SELECTOR, 'a.PaginationWidget__arrow_right')
+                next_page = driver.find_elements(By.XPATH, '//*[contains(text(), "Следующая")]/ancestor::a[1]')
                 if next_page:
                     next_page = next_page[0].get_attribute('href')
 

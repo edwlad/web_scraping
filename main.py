@@ -1,19 +1,19 @@
 from driver import WebDriverContext
 from sqllite import Sqllite
 from notik import Notik
-from citilink import Citilink
+from citilink_new import Citilink
 
 # Параметры
 browser = ('chrome', 'firefox', 'edge')[0]  # Выбор браузера
 headless = True  # Не показывать окно браузера
-max_items = 10  # Максимальное количество записей
+max_items = 600  # Максимальное количество записей
 new_data = True  # Заново собрать данные с сайтов
 ranks = (('cpu_hhz', 2), ('ram_gb', 5), ('ssd_gb', 0.1), ('price_rub', -0.001))  # Рейтинг параметров
 new_rank = False  # Пересчитать рейтинг
 top = 5  # Количество лучших по рейтингу для вывода
 
-# sites = (Notik(), Citilink(),)
-sites = (Citilink(),)
+sites = (Notik(), Citilink(),)
+# sites = (Citilink(),)
 with Sqllite() as db:
     # Сбор данных с сайтов
     if new_data:
