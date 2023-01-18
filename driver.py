@@ -17,8 +17,10 @@ class WebDriverContext:
                 from webdriver_manager.firefox import GeckoDriverManager
                 options = Options()
                 options.headless = self.head
-                options.page_load_strategy = 'eager'
                 # options.add_argument("--headless")
+                options.page_load_strategy = 'eager'
+                # Отключение JS
+                # options.set_preference('javascript.enabled', False)
                 self.driver = webdriver.Firefox(
                     service=Service(GeckoDriverManager().install()),
                     options=options
@@ -29,8 +31,20 @@ class WebDriverContext:
                 from webdriver_manager.microsoft import EdgeChromiumDriverManager
                 options = Options()
                 options.headless = self.head
-                options.page_load_strategy = 'eager'
                 # options.add_argument("--headless")
+                options.page_load_strategy = 'eager'
+                # Отключение JS, images, CSS и т.д.
+                # options.add_experimental_option(
+                #     'prefs',
+                #     {
+                #         'profile.managed_default_content_settings.javascript': 2,
+                #         'profile.managed_default_content_settings.images': 2,
+                #         'profile.managed_default_content_settings.mixed_script': 2,
+                #         'profile.managed_default_content_settings.media_stream': 2,
+                #         'profile.managed_default_content_settings.stylesheets': 2
+                #     }
+                # )
+                # Исключение вывода в консоль ошибки USB usb_device_handle_win.cc:... в Windows 10 для Chrome
                 options.add_experimental_option('excludeSwitches', ['enable-logging'])
                 self.driver = webdriver.Edge(
                     service=Service(EdgeChromiumDriverManager().install()),
@@ -46,20 +60,32 @@ class WebDriverContext:
                 # options.add_argument("--headless")
                 # options.add_argument("--disable-dev-shm-usage")
                 # options.add_argument("--no-sandbox")
+                # Отключение JS, images, CSS и т.д.
+                # options.add_experimental_option(
+                #     'prefs',
+                #     {
+                #         'profile.managed_default_content_settings.javascript': 2,
+                #         'profile.managed_default_content_settings.images': 2,
+                #         'profile.managed_default_content_settings.mixed_script': 2,
+                #         'profile.managed_default_content_settings.media_stream': 2,
+                #         'profile.managed_default_content_settings.stylesheets': 2
+                #     }
+                # )
                 # Исключение вывода в консоль ошибки USB usb_device_handle_win.cc:... в Windows 10 для Chrome
                 options.add_experimental_option('excludeSwitches', ['enable-logging'])
                 self.driver = webdriver.Chrome(
                     service=Service(ChromeDriverManager().install()),
                     chrome_options=options
                 )
-        return self.driver
 
-    #     self.driver.get(self.start_url)
-    #     cookies_list = self.driver.get_cookies()
-    #     self.cookies_dict = {}
-    #     for cookie in cookies_list:
-    #         self.cookies_dict[cookie["name"]] = cookie["value"]
-    #     return self
+        # Работа с cookies, но только после открытия страницы
+        # self.driver.get(self.start_url)
+        # cookies_list = self.driver.get_cookies()
+        # self.cookies_dict = {}
+        # for cookie in cookies_list:
+        #     self.cookies_dict[cookie["name"]] = cookie["value"]
+
+        return self.driver
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Выход из контекста, завершает сессию общения с браузером."""
