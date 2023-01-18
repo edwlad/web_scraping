@@ -18,7 +18,7 @@ class WebDriverContext:
                 options = Options()
                 options.headless = self.head
                 # options.add_argument("--headless")
-                options.page_load_strategy = 'eager'
+                # options.page_load_strategy = 'eager'
                 # Отключение JS
                 # options.set_preference('javascript.enabled', False)
                 self.driver = webdriver.Firefox(
@@ -32,7 +32,7 @@ class WebDriverContext:
                 options = Options()
                 options.headless = self.head
                 # options.add_argument("--headless")
-                options.page_load_strategy = 'eager'
+                # options.page_load_strategy = 'eager'
                 # Отключение JS, images, CSS и т.д.
                 # options.add_experimental_option(
                 #     'prefs',
@@ -56,7 +56,7 @@ class WebDriverContext:
                 from webdriver_manager.chrome import ChromeDriverManager
                 options = Options()
                 options.headless = self.head
-                options.page_load_strategy = 'eager'
+                # options.page_load_strategy = 'eager'
                 # options.add_argument("--headless")
                 # options.add_argument("--disable-dev-shm-usage")
                 # options.add_argument("--no-sandbox")

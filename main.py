@@ -1,7 +1,7 @@
 from driver import WebDriverContext
 from sqllite import Sqllite
 from notik import Notik
-from citilink_new import Citilink
+from citilink import Citilink
 
 # Параметры
 browser = ('chrome', 'firefox', 'edge')[0]  # Выбор браузера
